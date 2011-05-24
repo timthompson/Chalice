@@ -1,0 +1,6 @@
+This example is based on the QOTD example from the book Grails in Action.
+It has been modified where necessary to work within this framework and with ColdFusion.
+You will need to set up a datasource named qotd in order for this to work.
+I'm currently looking for ways to auto create the datasource if it doesn't exist.  
+I would also like to figure out how to create a derby database on the RAM drive ColdFusion provides,
+but this doesn't seem possible.
