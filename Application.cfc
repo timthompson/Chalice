@@ -16,7 +16,7 @@
 			{ "^/([\w]+)$"              = { controller = 1 } },               // /foo
 			{ "^/([\w]+)/([\w]+)$"      = { controller = 1, action = 2 } }    // /foo/bar
 		];
-			
+		
 	</cfscript>
 
 	<cfscript>
@@ -70,7 +70,7 @@
 		
 		<!--- Call the appropriate action within the controller cfc --->
 		<cfinvoke 
-			component          = "controllers/#variables.controller#" 
+			component          = "/controllers/#variables.controller#Controller" 
 			method             = "#variables.action#"
 			argumentcollection = "#request#"
 			returnvariable     = "result"
@@ -108,9 +108,9 @@
 	<cffunction name="GetDefaultAction" access="private" returntype="string" output="false">
 		<cfargument name="controller" type="string" required="yes" />
 		
-		<cfset var meta   = GetComponentMetaData( "controllers." & arguments.controller ) />
+		<cfset var meta   = GetComponentMetaData( "controllers." & arguments.controller & "Controller" ) />
 		<cfset var action = "" />
-		
+		<cfdump var="#meta#" />
 		<cfif StructKeyExists( meta, "DEFAULTACTION" )>
 			<cfset action = meta.defaultAction />
 		<cfelseif StructKeyExists( meta, "extends" ) and StructKeyExists( meta.extends, "DEFAULTACTION" )>
@@ -125,7 +125,7 @@
 		<cfargument name="action" type="string" required="no" default="" />
 
 		<cfset var decorator = "" />
-		<cfset var meta      = GetComponentMetaData( "controllers." & arguments.controller ) />		
+		<cfset var meta      = GetComponentMetaData( "controllers." & arguments.controller & "Controller" ) />		
 
 		<cfif arguments.action neq "">
 			<cfloop array="#meta.functions#" index="func">
@@ -162,4 +162,18 @@
 			return _url;
 		};
 	</cfscript>
+	<cfscript>	
+		string function createLinkTo( string dir = "", string file = "" ){
+			var _action = arguments.action;
+			var _url    = "";
+			
+			if ( _action neq "" ){
+				_action = "/" & _action;
+			};
+			
+			_url = cgi.SCRIPT_NAME & "/" & arguments.controller & _action;
+
+			return _url;
+		};
+	</cfscript>	
 </cfcomponent>
